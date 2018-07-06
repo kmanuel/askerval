@@ -1,4 +1,7 @@
 const electron = require('electron');
+const Datastore = require('nedb');
+
+const db = new Datastore();
 
 const {app, BrowserWindow, ipcMain} = require('electron');
 
@@ -28,5 +31,14 @@ app.on('activate', () => {
 });
 
 ipcMain.on('rating', (event, rating) => {
-    console.log('received rating: ', rating);
+    db.insert({
+        rating,
+        date: new Date()
+    }, (err, newDoc) => {
+        if (err) {
+            console.log('error inserting rating', err);
+        } else {
+            console.log('inserted new rating', newDoc);
+        }
+    });
 });

@@ -18,5 +18,8 @@
   "homepage": "https://github.com/kmanuel/askerval#readme",
   "devDependencies": {
     "electron": "^2.0.4"
+  },
+  "dependencies": {
+    "nedb": "^1.8.0"
   }
 }
