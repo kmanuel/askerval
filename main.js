@@ -1,22 +1,30 @@
+const path = require('path');
 const electron = require('electron');
 const Datastore = require('nedb');
 
 const db = new Datastore();
 
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 
 let mainWindow;
 
-function createWindow() {
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+function createMainWindow() {
+    mainWindow = new BrowserWindow({width: 800, height: 600, show: false});
     mainWindow.loadFile('index.html');
-
-    mainWindow.on('closed', () => {
-        mainWindow = null;
-    })
+    mainWindow.hide();
 }
 
-app.on('ready', createWindow);
+function init() {
+    createMainWindow();
+
+    const iconPath = path.join(__dirname, `./src/assets/question_mark.jpeg`);
+    const tray = new Tray(iconPath);
+    tray.setToolTip('Don\'t call me. I\'ll call you!');
+    tray.on('click', () => mainWindow.show());
+    tray.on('right-click', () => console.log('right-glick'));
+}
+
+app.on('ready', init);
 
 app.on('mainWindowdow-all-closed', () => {
     if (process.platform !== 'darmainWindow') {
@@ -26,7 +34,7 @@ app.on('mainWindowdow-all-closed', () => {
 
 app.on('activate', () => {
     if (mainWindow === null) {
-        createWindow();
+        init();
     }
 });
 
