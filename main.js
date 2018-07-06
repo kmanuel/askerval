@@ -1,3 +1,4 @@
+//noinspection NodeJsCodingAssistanceForCoreModules
 const path = require('path');
 const electron = require('electron');
 const Datastore = require('nedb');
@@ -9,7 +10,7 @@ const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 let mainWindow;
 
 function createMainWindow() {
-    mainWindow = new BrowserWindow({width: 800, height: 600, show: false});
+    mainWindow = new BrowserWindow({width: 275, height: 325, show: false});
     mainWindow.loadFile('index.html');
     mainWindow.hide();
 }
