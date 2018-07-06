@@ -42,7 +42,6 @@ let createTray = function () {
     const tray = new Tray(iconPath);
     tray.setToolTip('Don\'t call me. I\'ll call you!');
     tray.on('click', toggleWindowVisibility);
-    tray.on('right-click', () => console.log('right-glick'));
 };
 
 let startAskingTimer = function () {

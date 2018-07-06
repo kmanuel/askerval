@@ -35,7 +35,7 @@ const create = () => {
     });
 
     const switchToHistoryView = () => {
-        document.querySelector('#rate-view').style.display = 'none';
+        document.querySelectorAll('.toggle-view').forEach(v => v.style.display = 'none');
         document.querySelector('#history-view').style.display = 'block';
     };
 

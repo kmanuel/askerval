@@ -9,7 +9,7 @@ const create = () => {
 
     const show = function () {
         document.querySelectorAll('.toggle-view').forEach(v => v.style.display = 'none');
-        document.querySelector('#rate-view').style.display = 'block';
+        document.querySelector('#settings-view').style.display = 'block';
     };
 
     return {show}

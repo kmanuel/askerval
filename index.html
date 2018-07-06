@@ -14,10 +14,11 @@
     <div class="buttons">
         <button id="rate-view-btn">Rate</button>
         <button id="history-view-btn">History</button>
+        <button id="settings-view-btn">Settings</button>
     </div>
 </nav>
 
-<div id="rate-view">
+<div id="rate-view" class="toggle-view">
     <h2>What's your mood?</h2>
     <div class="mood-rating">
         <span>bad</span>
@@ -42,9 +43,15 @@
 </div>
 
 
-<div id="history-view" style="display: none;">
+<div id="history-view" class="toggle-view" style="display: none;">
     <h2>Moods</h2>
     <ul id="prev-moods"></ul>
+</div>
+
+<div id="settings-view" class="toggle-view" style="display: none">
+    <h2>Settings</h2>
+    asdf
+    qwer
 </div>
 
 <script>
