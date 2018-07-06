@@ -50,7 +50,22 @@ let startAskingTimer = function () {
     }, askingTimeout);
 };
 
+const initDefaultDb = () => {
+    db.insert({
+        type: 'settings',
+        setting: {
+            question: 'How are you?',
+            interval: 500
+        }
+    }, (err) => {
+        if (err) {
+            console.log('failed to init default db', err);
+        }
+    })
+};
+
 function init() {
+    initDefaultDb();
     createMainWindow();
     createTray();
     startAskingTimer();
@@ -113,14 +128,34 @@ const addIpcListeners = function () {
     ipcMain.on(ipcConstants.SETTINGS_CHANGE, (event, settings) => {
         const {interval} = settings;
 
+        db.insert({
+            type: 'settings',
+            setting: settings
+        });
+
         // save to db
         // change interval if interval change
         // change question if question change
         // send  update to frontend if question change
 
         changeIntervalTo(interval);
-        console.log('received a setting change!', settings);
     });
+
+    ipcMain.on(ipcConstants.SETTINGS_LOAD, () => {
+        db.findOne({
+            type: 'settings'
+        }, (err, doc) => {
+            if (err) {
+                console.log('error loading settings ', err);
+            }
+            if (!doc) {
+                console.log('couldn\'t find settings in db');
+                return;
+            }
+            const {setting} = doc;
+            mainWindow.webContents.send(ipcConstants.SETTINGS_LOAD_RESPONSE, setting);
+        })
+    })
 };
 
 createApp();

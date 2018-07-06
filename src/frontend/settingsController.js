@@ -8,7 +8,6 @@ const create = () => {
             question: document.querySelector('input#question').value,
             interval: document.querySelector('input#ask-interval').value
         };
-
         ipcRenderer.send(ipcConstants.SETTINGS_CHANGE, settings);
     });
 
