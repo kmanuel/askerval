@@ -48,66 +48,7 @@
 </div>
 
 <script>
-    const electron = require('electron');
-    const ipcConstants = require('./src/shared/ipcConstants');
-
-    const {ipcRenderer} = electron;
-
-    const updateMoodList = (moods) => {
-        const prevMoodsEl = document.querySelector('#prev-moods');
-        prevMoodsEl.innerHTML = '';
-
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-        };
-
-        moods.forEach(mood => {
-            const moodLi = document.createElement('li');
-            const formattedDate = new Date(mood.date).toLocaleDateString('en-US', options);
-            const text = document.createTextNode(`${formattedDate}: ${mood.rating}`);
-
-            moodLi.appendChild(text);
-            prevMoodsEl.appendChild(moodLi);
-        })
-    };
-
-    const switchToRateView = function () {
-        document.querySelector('#rate-view').style.display = 'block';
-        document.querySelector('#history-view').style.display = 'none';
-    };
-
-    const switchToHistoryView = () => {
-        document.querySelector('#rate-view').style.display = 'none';
-        document.querySelector('#history-view').style.display = 'block';
-    };
-
-    document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
-        ipcRenderer.send(ipcConstants.RATING_NEW, evt.target.value);
-    }));
-
-    document.querySelector('#rate-view-btn').addEventListener('click', () => {
-        switchToRateView();
-    });
-
-    document.querySelector('#history-view-btn').addEventListener('click', () => {
-        requestMoodHistory();
-        switchToHistoryView();
-    });
-
-
-    const requestMoodHistory = () => {
-        ipcRenderer.send(ipcConstants.ENTRIES_LOAD_REQUEST);
-    };
-
-    ipcRenderer.on(ipcConstants.ENTRIES_LOAD_RESPONSE, (evt, moods) => {
-        updateMoodList(moods);
-    });
-
+    require('./src/frontend/frontend');
 </script>
 
 </body>
