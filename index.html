@@ -42,7 +42,6 @@
 
 <div id="history-view" style="display: none;">
     <h2>Moods</h2>
-    <button id="load-moods">Load Moods</button>
     <ul id="prev-moods"></ul>
 </div>
 
@@ -50,16 +49,7 @@
     const electron = require('electron');
     const {ipcRenderer} = electron;
 
-    document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
-        const rating = evt.target.value;
-        ipcRenderer.send('rating', rating);
-    }));
-
-    document.querySelector('#load-moods').addEventListener('click', () => {
-        ipcRenderer.send('mood:load-all');
-    });
-
-    ipcRenderer.on('mood:list', (evt, moods) => {
+    const updateMoodList = (moods) => {
         const prevMoodsEl = document.querySelector('#prev-moods');
         prevMoodsEl.innerHTML = '';
 
@@ -70,17 +60,39 @@
             moodLi.appendChild(text);
             prevMoodsEl.appendChild(moodLi);
         })
+    };
 
-    });
-
-    document.querySelector('#rate-view-btn').addEventListener('click', () => {
+    const switchToRateView = function () {
         document.querySelector('#rate-view').style.display = 'block';
         document.querySelector('#history-view').style.display = 'none';
+    };
+
+    const switchToHistoryView = () => {
+        document.querySelector('#rate-view').style.display = 'none';
+        document.querySelector('#history-view').style.display = 'block';
+    };
+
+    document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
+        const rating = evt.target.value;
+        ipcRenderer.send('rating', rating);
+    }));
+
+    document.querySelector('#rate-view-btn').addEventListener('click', () => {
+        switchToRateView();
     });
 
     document.querySelector('#history-view-btn').addEventListener('click', () => {
-        document.querySelector('#rate-view').style.display = 'none';
-        document.querySelector('#history-view').style.display = 'block';
+        requestMoodHistory();
+        switchToHistoryView();
+    });
+
+
+    const requestMoodHistory = () => {
+        ipcRenderer.send('mood:load-all');
+    };
+
+    ipcRenderer.on('mood:list', (evt, moods) => {
+        updateMoodList(moods);
     });
 
 </script>
