@@ -57,38 +57,46 @@ function init() {
     startAskingTimer();
 }
 
-app.on('ready', init);
+let createApp = function () {
+    app.on('ready', init);
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (mainWindow === null) {
-        init();
-    }
-});
-
-ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
-    db.insert({
-        rating,
-        date: new Date()
-    }, (err) => {
-        if (err) {
-            console.log('error inserting rating', err);
-        }
-        mainWindow.hide();
-    });
-});
-
-ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
-    db.find({}, (err, docs) => {
-        if (err) {
-            console.log('error loading moods');
-        } else {
-            mainWindow.webContents.send(ipcConstants.ENTRIES_LOAD_RESPONSE, docs);
+    app.on('window-all-closed', () => {
+        if (process.platform !== 'darwin') {
+            app.quit();
         }
     });
-});
+
+    app.on('activate', () => {
+        if (mainWindow === null) {
+            init();
+        }
+    });
+};
+
+
+const addIpcListeners = function () {
+    ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
+        db.insert({
+            rating,
+            date: new Date()
+        }, (err) => {
+            if (err) {
+                console.log('error inserting rating', err);
+            }
+            mainWindow.hide();
+        });
+    });
+
+    ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
+        db.find({}, (err, docs) => {
+            if (err) {
+                console.log('error loading moods');
+            } else {
+                mainWindow.webContents.send(ipcConstants.ENTRIES_LOAD_RESPONSE, docs);
+            }
+        });
+    });
+};
+
+createApp();
+addIpcListeners();

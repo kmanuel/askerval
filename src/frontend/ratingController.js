@@ -12,9 +12,7 @@ const create = () => {
         document.querySelector('#history-view').style.display = 'none';
     };
 
-    return {
-        show
-    }
+    return {show}
 };
 
 module.exports = {create};

@@ -48,9 +48,7 @@ const create = () => {
         switchToHistoryView();
     };
 
-    return {
-        show
-    }
+    return {show}
 };
 
 module.exports = {create};
