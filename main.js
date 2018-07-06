@@ -5,9 +5,14 @@ const Datastore = require('nedb');
 
 const db = new Datastore();
 
+const ONE_SECOND = 1000;
+const ONE_MINUTE = ONE_SECOND * 60;
+const ONE_HOUR = ONE_MINUTE * 60;
+
 const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 
-let mainWindow;
+let mainWindow, askingTimer;
+let askingTimeout = ONE_HOUR;
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
@@ -30,14 +35,24 @@ function toggleWindowVisibility() {
     }
 }
 
-function init() {
-    createMainWindow();
-
+let createTray = function () {
     const iconPath = path.join(__dirname, `./src/assets/question_mark.jpeg`);
     const tray = new Tray(iconPath);
     tray.setToolTip('Don\'t call me. I\'ll call you!');
     tray.on('click', toggleWindowVisibility);
     tray.on('right-click', () => console.log('right-glick'));
+};
+
+let startAskingTimer = function () {
+    askingTimer = setInterval(() => {
+        mainWindow.show();
+    }, askingTimeout);
+};
+
+function init() {
+    createMainWindow();
+    createTray();
+    startAskingTimer();
 }
 
 app.on('ready', init);
