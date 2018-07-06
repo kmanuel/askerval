@@ -8,7 +8,9 @@
     <title>Document</title>
 </head>
 <body>
-<h1>Your current mood?</h1>
+<h1>Askerval</h1>
+
+<h2>What's your mood?</h2>
 <div class="mood-rating">
     <span>bad</span>
 
@@ -30,6 +32,9 @@
     <span>good</span>
 </div>
 
+
+<button id="load-moods">Load Moods</button>
+
 <script>
     const electron = require('electron');
     const { ipcRenderer } = electron;
@@ -38,6 +43,15 @@
         const rating = evt.target.value;
         ipcRenderer.send('rating', rating);
     }));
+
+    document.querySelector('#load-moods').addEventListener('click', () => {
+        ipcRenderer.send('mood:load-all');
+    });
+
+    ipcRenderer.on('mood:list', (evt, moods) => {
+        console.log('received-moods', moods);
+    })
+
 </script>
 
 </body>

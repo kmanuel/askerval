@@ -5,27 +5,27 @@ const db = new Datastore();
 
 const {app, BrowserWindow, ipcMain} = require('electron');
 
-let win;
+let mainWindow;
 
 function createWindow() {
-    win = new BrowserWindow({width: 800, height: 600});
-    win.loadFile('index.html');
+    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow.loadFile('index.html');
 
-    win.on('closed', () => {
-        win = null;
+    mainWindow.on('closed', () => {
+        mainWindow = null;
     })
 }
 
 app.on('ready', createWindow);
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+app.on('mainWindowdow-all-closed', () => {
+    if (process.platform !== 'darmainWindow') {
         app.quit();
     }
 });
 
 app.on('activate', () => {
-    if (win === null) {
+    if (mainWindow === null) {
         createWindow();
     }
 });
@@ -39,6 +39,16 @@ ipcMain.on('rating', (event, rating) => {
             console.log('error inserting rating', err);
         } else {
             console.log('inserted new rating', newDoc);
+        }
+    });
+});
+
+ipcMain.on('mood:load-all', () => {
+    db.find({}, (err, docs) => {
+        if (err) {
+            console.log('error loading moods');
+        } else {
+            mainWindow.webContents.send('mood:list', docs);
         }
     });
 });
