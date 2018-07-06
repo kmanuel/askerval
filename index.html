@@ -49,6 +49,8 @@
 
 <script>
     const electron = require('electron');
+    const ipcConstants = require('./src/shared/ipcConstants');
+
     const {ipcRenderer} = electron;
 
     const updateMoodList = (moods) => {
@@ -85,8 +87,7 @@
     };
 
     document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
-        const rating = evt.target.value;
-        ipcRenderer.send('rating', rating);
+        ipcRenderer.send(ipcConstants.RATING_NEW, evt.target.value);
     }));
 
     document.querySelector('#rate-view-btn').addEventListener('click', () => {
@@ -100,10 +101,10 @@
 
 
     const requestMoodHistory = () => {
-        ipcRenderer.send('mood:load-all');
+        ipcRenderer.send(ipcConstants.ENTRIES_LOAD_REQUEST);
     };
 
-    ipcRenderer.on('mood:list', (evt, moods) => {
+    ipcRenderer.on(ipcConstants.ENTRIES_LOAD_RESPONSE, (evt, moods) => {
         updateMoodList(moods);
     });
 

@@ -3,6 +3,8 @@ const path = require('path');
 const electron = require('electron');
 const Datastore = require('nedb');
 
+const ipcConstants = require('./src/shared/ipcConstants');
+
 const db = new Datastore();
 
 const ONE_SECOND = 1000;
@@ -57,7 +59,7 @@ function init() {
 
 app.on('ready', init);
 
-app.on('mainWindowdow-all-closed', () => {
+app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     }
@@ -69,7 +71,7 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('rating', (event, rating) => {
+ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
     db.insert({
         rating,
         date: new Date()
@@ -81,12 +83,12 @@ ipcMain.on('rating', (event, rating) => {
     });
 });
 
-ipcMain.on('mood:load-all', () => {
+ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
     db.find({}, (err, docs) => {
         if (err) {
             console.log('error loading moods');
         } else {
-            mainWindow.webContents.send('mood:list', docs);
+            mainWindow.webContents.send(ipcConstants.ENTRIES_LOAD_RESPONSE, docs);
         }
     });
 });
