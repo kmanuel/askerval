@@ -72,6 +72,20 @@ let createApp = function () {
     });
 };
 
+const stopTimer = () => {
+    clearInterval(askingTimer);
+};
+
+const restartTimer = () => {
+    stopTimer();
+    startAskingTimer();
+};
+
+const changeIntervalTo = (interval) => {
+    askingTimeout = interval * ONE_SECOND;
+    restartTimer();
+};
+
 
 const addIpcListeners = function () {
     ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
@@ -97,6 +111,14 @@ const addIpcListeners = function () {
     });
 
     ipcMain.on(ipcConstants.SETTINGS_CHANGE, (event, settings) => {
+        const {interval} = settings;
+
+        // save to db
+        // change interval if interval change
+        // change question if question change
+        // send  update to frontend if question change
+
+        changeIntervalTo(interval);
         console.log('received a setting change!', settings);
     });
 };
