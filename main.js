@@ -90,7 +90,7 @@ const addIpcListeners = function () {
     ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
         db.find({}, (err, docs) => {
             if (err) {
-                console.log('error loading moods');
+                console.log('error loading moods', err);
             } else {
                 mainWindow.webContents.send(ipcConstants.ENTRIES_LOAD_RESPONSE, docs);
             }
