@@ -5,13 +5,17 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+    <title>Askerval</title>
 </head>
 <body>
-<h1>Askerval</h1>
-
-<button id="rate-view-btn">Rate</button>
-<button id="history-view-btn">History</button>
+<nav>
+    <h1>Askerval</h1>
+    <div class="buttons">
+        <button id="rate-view-btn">Rate</button>
+        <button id="history-view-btn">History</button>
+    </div>
+</nav>
 
 <div id="rate-view">
     <h2>What's your mood?</h2>
@@ -38,8 +42,6 @@
 </div>
 
 
-
-
 <div id="history-view" style="display: none;">
     <h2>Moods</h2>
     <ul id="prev-moods"></ul>
@@ -53,9 +55,19 @@
         const prevMoodsEl = document.querySelector('#prev-moods');
         prevMoodsEl.innerHTML = '';
 
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        };
+
         moods.forEach(mood => {
             const moodLi = document.createElement('li');
-            const text = document.createTextNode(`${mood.date}: ${mood.rating}`);
+            const formattedDate = new Date(mood.date).toLocaleDateString('en-US', options);
+            const text = document.createTextNode(`${formattedDate}: ${mood.rating}`);
 
             moodLi.appendChild(text);
             prevMoodsEl.appendChild(moodLi);
