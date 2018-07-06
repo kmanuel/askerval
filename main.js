@@ -95,6 +95,10 @@ const addIpcListeners = function () {
             }
         });
     });
+
+    ipcMain.on(ipcConstants.SETTINGS_CHANGE, (event, settings) => {
+        console.log('received a setting change!', settings);
+    });
 };
 
 createApp();
