@@ -18,7 +18,7 @@ let askingTimeout = ONE_HOUR;
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 275,
+        width: 325,
         height: 325,
         show: false,
         frame: false,

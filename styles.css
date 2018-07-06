@@ -5,3 +5,19 @@ nav > * {
 .buttons {
     padding-left: 15px;
 }
+
+.setting-entry {
+    margin: 10px 0;
+}
+
+.setting-entry > * {
+    display: inline-block;
+}
+
+.setting-entry input {
+    width: 70%;
+}
+
+.setting-entry label {
+    width: 25%;
+}
