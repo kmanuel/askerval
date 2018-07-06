@@ -13,7 +13,7 @@ const ONE_HOUR = ONE_MINUTE * 60;
 
 const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 
-let mainWindow, askingTimer;
+let mainWindow, currentQuestion, askingTimer;
 let askingTimeout = ONE_HOUR;
 
 function createMainWindow() {
@@ -50,25 +50,38 @@ let startAskingTimer = function () {
     }, askingTimeout);
 };
 
-const initDefaultDb = () => {
-    db.insert({
-        type: 'settings',
-        setting: {
-            question: 'How are you?',
-            interval: 500
-        }
-    }, (err) => {
-        if (err) {
-            console.log('failed to init default db', err);
-        }
-    })
+const initDb = async() => {
+    const question = 'How are you?';
+    const interval = ONE_HOUR / 60;
+
+    currentQuestion = question;
+    askingTimer = interval * 60;
+
+    return new Promise((resolve, reject) => {
+        db.insert({
+            type: 'settings',
+            setting: {
+                question: question,
+                interval: interval
+            }
+        }, (err) => {
+            if (err) {
+                console.log('failed to init default db', err);
+                reject();
+            }
+            resolve();
+        })
+    });
 };
 
 function init() {
-    initDefaultDb();
-    createMainWindow();
-    createTray();
-    startAskingTimer();
+    initDb().then(() => {
+            createMainWindow();
+            createTray();
+            startAskingTimer();
+        }
+    )
+
 }
 
 let createApp = function () {
@@ -126,8 +139,9 @@ const addIpcListeners = function () {
     });
 
     ipcMain.on(ipcConstants.SETTINGS_CHANGE, (event, settings) => {
-        const {interval} = settings;
+        const interval = settings.interval * 60;
 
+        settings.interval = interval;
         db.insert({
             type: 'settings',
             setting: settings
