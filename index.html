@@ -35,6 +35,9 @@
 
 <button id="load-moods">Load Moods</button>
 
+<h2>Moods</h2>
+<ul id="prev-moods"></ul>
+
 <script>
     const electron = require('electron');
     const { ipcRenderer } = electron;
@@ -49,8 +52,18 @@
     });
 
     ipcRenderer.on('mood:list', (evt, moods) => {
-        console.log('received-moods', moods);
-    })
+        const prevMoodsEl = document.querySelector('#prev-moods');
+        prevMoodsEl.innerHTML = '';
+
+        moods.forEach(mood => {
+            const moodLi = document.createElement('li');
+            const text = document.createTextNode(`${mood.date}: ${mood.rating}`);
+
+            moodLi.appendChild(text);
+            prevMoodsEl.appendChild(moodLi);
+        })
+
+    });
 
 </script>
 
