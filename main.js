@@ -1,6 +1,6 @@
 const electron = require('electron');
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 
 let win;
 
@@ -25,4 +25,8 @@ app.on('activate', () => {
     if (win === null) {
         createWindow();
     }
+});
+
+ipcMain.on('rating', (event, rating) => {
+    console.log('received rating: ', rating);
 });
