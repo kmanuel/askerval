@@ -10,37 +10,45 @@
 <body>
 <h1>Askerval</h1>
 
-<h2>What's your mood?</h2>
-<div class="mood-rating">
-    <span>bad</span>
+<button id="rate-view-btn">Rate</button>
+<button id="history-view-btn">History</button>
 
-    <input type="radio" name="mood" id="1_mood" value="1">
-    <label for="1_mood">1</label>
+<div id="rate-view">
+    <h2>What's your mood?</h2>
+    <div class="mood-rating">
+        <span>bad</span>
 
-    <input type="radio" name="mood" id="2_mood" value="2">
-    <label for="2_mood">2</label>
+        <input type="radio" name="mood" id="1_mood" value="1">
+        <label for="1_mood">1</label>
 
-    <input type="radio" name="mood" id="3_mood" value="3">
-    <label for="3_mood">3</label>
+        <input type="radio" name="mood" id="2_mood" value="2">
+        <label for="2_mood">2</label>
 
-    <input type="radio" name="mood" id="4_mood" value="4">
-    <label for="4_mood">4</label>
+        <input type="radio" name="mood" id="3_mood" value="3">
+        <label for="3_mood">3</label>
 
-    <input type="radio" name="mood" id="5_mood" value="5">
-    <label for="5_mood">5</label>
+        <input type="radio" name="mood" id="4_mood" value="4">
+        <label for="4_mood">4</label>
 
-    <span>good</span>
+        <input type="radio" name="mood" id="5_mood" value="5">
+        <label for="5_mood">5</label>
+
+        <span>good</span>
+    </div>
 </div>
 
 
-<button id="load-moods">Load Moods</button>
 
-<h2>Moods</h2>
-<ul id="prev-moods"></ul>
+
+<div id="history-view" style="display: none;">
+    <h2>Moods</h2>
+    <button id="load-moods">Load Moods</button>
+    <ul id="prev-moods"></ul>
+</div>
 
 <script>
     const electron = require('electron');
-    const { ipcRenderer } = electron;
+    const {ipcRenderer} = electron;
 
     document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
         const rating = evt.target.value;
@@ -63,6 +71,16 @@
             prevMoodsEl.appendChild(moodLi);
         })
 
+    });
+
+    document.querySelector('#rate-view-btn').addEventListener('click', () => {
+        document.querySelector('#rate-view').style.display = 'block';
+        document.querySelector('#history-view').style.display = 'none';
+    });
+
+    document.querySelector('#history-view-btn').addEventListener('click', () => {
+        document.querySelector('#rate-view').style.display = 'none';
+        document.querySelector('#history-view').style.display = 'block';
     });
 
 </script>
