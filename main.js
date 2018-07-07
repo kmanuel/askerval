@@ -3,11 +3,12 @@ const path = require('path');
 const electron = require('electron');
 const Datastore = require('nedb'),
     db = new Datastore({
-        filename: '.nedb-data/ratings.db',
+        filename: 'data/nedb/ratings.db',
         autoload: true
     });
 
 const ipcConstants = require('./src/shared/ipcConstants');
+const screenCapturer = require('./src/backend/screenCapturer').create();
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
@@ -78,15 +79,22 @@ let createApp = function () {
 
 const addIpcListeners = function () {
     ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
-        const entry = {...rating, date: new Date()};
-        db.insert({
-            entry
-        }, (err) => {
-            if (err) {
-                console.log('error inserting rating', err);
-            }
-            mainWindow.hide();
-        });
+        screenCapturer.capture()
+            .then((filename) => {
+                const entry = {...rating, date: new Date(), screenshot: filename};
+                console.log('inserting entry: ', entry);
+                db.insert({
+                    entry
+                }, (err) => {
+                    if (err) {
+                        console.log('error inserting rating', err);
+                    }
+                    mainWindow.hide();
+                });
+            })
+            .catch(err => {
+                console.log('error capturing screen', err);
+            });
     });
 
     ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {

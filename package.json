@@ -20,6 +20,7 @@
     "electron": "^2.0.4"
   },
   "dependencies": {
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "screenshot-desktop": "^1.4.2"
   }
 }
