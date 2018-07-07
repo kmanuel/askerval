@@ -5,16 +5,22 @@ const screenshot = require('screenshot-desktop');
 const create = () => {
     const capture = async() => {
         return new Promise((resolve, reject) => {
-            screenshot()
-                .then(buffer => {
-                    const filename = `data/screenshots/shot_${new Date().getTime()}.jpg`;
-                    fs.writeFile(filename, buffer, null, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(filename);
-                        }
-                    })
+            screenshot.all()
+                .then(buffers => {
+                    const filenames = [];
+
+                    for (let i = 0; i < buffers.length; i++) {
+                        const filename = `data/screenshots/shot${i}_${new Date().getTime()}.jpg`;
+                        filenames.push(filename);
+
+                        fs.writeFile(filename, buffers[i], null, (err) => {
+                            if (err) {
+                                reject(err);
+                            }
+                        })
+                    }
+
+                    resolve(filenames);
                 })
                 .catch(err => {
                     reject(err);
@@ -22,7 +28,7 @@ const create = () => {
         });
     };
 
-    return { capture };
+    return {capture};
 };
 
-module.exports = { create };
+module.exports = {create};

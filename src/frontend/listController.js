@@ -9,18 +9,21 @@ const create = () => {
         const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
         entryListItem.appendChild(text);
 
-        if (entry.screenshot) {
-            const screenshotLink = document.createElement('a');
-            screenshotLink.addEventListener('click', () => {
-                ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, entry.screenshot);
-            });
-            const icon = document.createElement("img");
-            icon.src = 'screenshot_icon.jpeg';
-            icon.style.width = '10px';
-            icon.style.height = '10px';
-            screenshotLink.appendChild(icon);
+        if (entry.screenshots) {
+            entry.screenshots.forEach(shot => {
+                const screenshotLink = document.createElement('a');
+                screenshotLink.addEventListener('click', () => {
+                    ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, shot);
+                });
+                const icon = document.createElement("img");
+                icon.src = 'screenshot_icon.jpeg';
+                icon.style.width = '10px';
+                icon.style.height = '10px';
+                screenshotLink.appendChild(icon);
 
-            entryListItem.appendChild(screenshotLink);
+                entryListItem.appendChild(screenshotLink);
+            });
+
         }
 
         prevAnswersEl.appendChild(entryListItem);

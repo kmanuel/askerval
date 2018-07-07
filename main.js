@@ -90,8 +90,9 @@ let createApp = function () {
 const addIpcListeners = function () {
     ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
         screenCapturer.capture()
-            .then((filename) => {
-                const entry = {...rating, date: new Date(), screenshot: filename};
+            .then((filenames) => {
+                const entry = {...rating, date: new Date(), screenshots: filenames};
+                console.log('inserting entry', entry);
                 db.insert({
                     entry
                 }, (err) => {
