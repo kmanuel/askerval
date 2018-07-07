@@ -19,6 +19,17 @@ const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 let mainWindow, askingTimer;
 let askingTimeout = ONE_HOUR;
 
+function ScreenshotWindow(screenshotPath) {
+    const screenshotWindow = new BrowserWindow({
+        width: 600,
+        height: 400,
+        show: true,
+    });
+    screenshotWindow.loadFile(screenshotPath);
+    screenshotWindow.setMenu(null);
+    return screenshotWindow;
+}
+
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         width: 275,
@@ -104,6 +115,10 @@ const addIpcListeners = function () {
             }
         });
     });
+
+    ipcMain.on(ipcConstants.SCREENSHOT_SHOW, (evt, filename) => {
+        new ScreenshotWindow(filename);
+    })
 };
 
 createApp();

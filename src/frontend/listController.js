@@ -4,12 +4,24 @@ const {ipcRenderer} = electron;
 
 const create = () => {
     const addListEntry = function (entry, options, prevAnswersEl) {
-        const moodLi = document.createElement('li');
+        const entryListItem = document.createElement('li');
         const formattedDate = new Date(entry.date).toLocaleDateString('en-US', options);
         const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
 
-        moodLi.appendChild(text);
-        prevAnswersEl.appendChild(moodLi);
+        let screenshotLink;
+        if (entry.screenshot) {
+            screenshotLink = document.createElement('a');
+            screenshotLink.addEventListener('click', (evt) => {
+                ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, entry.screenshot);
+            });
+            screenshotLink.appendChild(text);
+
+
+            entryListItem.appendChild(screenshotLink);
+        } else {
+            entryListItem.appendChild(text);
+        }
+        prevAnswersEl.appendChild(entryListItem);
     };
 
     const updateList = (ratings) => {
