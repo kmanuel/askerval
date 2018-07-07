@@ -14,7 +14,6 @@ Application that prompts you with a question in a set interval and records the a
 ### Building the application
 run `npm install`
 
-
 ## Usage
 
 ### Running the application

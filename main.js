@@ -108,7 +108,7 @@ const addIpcListeners = function () {
     });
 
     ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
-        db.find({}, (err, docs) => {
+        db.find({}).sort({'entry.date': -1}).exec((err, docs) => {
             if (err) {
                 console.log('error loading moods', err);
             } else {
