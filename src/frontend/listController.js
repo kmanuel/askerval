@@ -4,12 +4,6 @@ const {ipcRenderer} = electron;
 
 const create = () => {
     const addListEntry = function (entry, options, prevAnswersEl) {
-        console.log('adding list entry', entry);
-
-        const {entryValue, entryDate} = entry;
-        console.log('entryDate', entryDate);
-        console.log('entryValue', entryValue);
-
         const moodLi = document.createElement('li');
         const formattedDate = new Date(entry.date).toLocaleDateString('en-US', options);
         const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
