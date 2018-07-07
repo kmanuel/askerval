@@ -1,11 +1,13 @@
 //noinspection NodeJsCodingAssistanceForCoreModules
 const path = require('path');
 const electron = require('electron');
-const Datastore = require('nedb');
+const Datastore = require('nedb'),
+    db = new Datastore({
+        filename: '.nedb-data/ratings.db',
+        autoload: true
+    });
 
 const ipcConstants = require('./src/shared/ipcConstants');
-
-const db = new Datastore();
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
