@@ -5,33 +5,52 @@ const {ipcRenderer} = electron;
 const create = () => {
     const addListEntry = function (entry, options, prevAnswersEl) {
         const entryListItem = document.createElement('li');
+        entryListItem.classList.add('row');
+
         const formattedDate = new Date(entry.date).toLocaleDateString('en-US', options);
-        const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
-        entryListItem.appendChild(text);
+        const dateElement = document.createElement('span');
+        dateElement.innerText = formattedDate;
+        dateElement.classList.add('col', 's6');
+
+        const valueElement = document.createElement('span');
+        valueElement.innerText = entry.value;
+        valueElement.classList.add('col', 's3');
+
+        entryListItem.appendChild(dateElement);
+        entryListItem.appendChild(valueElement);
 
         if (entry.screenshots) {
+            const screenshotsElement = document.createElement('span');
+            screenshotsElement.classList.add('screenshots-container');
+
             entry.screenshots.forEach(shot => {
                 const screenshotLink = document.createElement('a');
+                screenshotLink.classList.add('secondary-content');
+
                 screenshotLink.addEventListener('click', () => {
                     ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, shot);
                 });
-                const icon = document.createElement("img");
-                icon.src = 'screenshot_icon.jpeg';
-                icon.style.width = '10px';
-                icon.style.height = '10px';
+                const icon = document.createElement("i");
+                icon.classList.add('material-icons', 'screenshot-icon');
+                icon.textContent = 'image';
                 screenshotLink.appendChild(icon);
 
-                entryListItem.appendChild(screenshotLink);
+                screenshotsElement.appendChild(screenshotLink);
             });
 
+            entryListItem.appendChild(screenshotsElement);
         }
 
+        entryListItem.classList.add('collection-item');
         prevAnswersEl.appendChild(entryListItem);
     };
 
     const updateList = (ratings) => {
         const prevAnswersEl = document.querySelector('#prev-ratings');
-        prevAnswersEl.innerHTML = '';
+
+        prevAnswersEl.querySelectorAll('.collection-item').forEach(item => {
+            item.parentNode.removeChild(item);
+        });
 
         const options = {
             year: 'numeric',
@@ -53,6 +72,8 @@ const create = () => {
     });
 
     const switchToHistoryView = () => {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelector('#list-nav').classList.add('active');
         document.querySelector('#rate-view').style.display = 'none';
         document.querySelector('#history-view').style.display = 'block';
     };

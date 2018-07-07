@@ -5,52 +5,75 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/
-    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <title>Askerval</title>
 </head>
 <body>
-<nav>
-    <h1>Askerval</h1>
-    <div class="buttons">
-        <button id="rate-view-btn">Rate</button>
-        <button id="history-view-btn">History</button>
+<nav class="teal accent-4">
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo left">Askerval</a>
+        <ul id="nav-mobile" class="right">
+            <li id="rate-nav" class="nav-item active"><a id=rate-view-btn" href="#">Rate</a></li>
+            <li id="list-nav" class="nav-item"><a id="history-view-btn" href="#">History</a></li>
+        </ul>
     </div>
 </nav>
 
-<div id="rate-view">
-    <h2 id="the-question">What's your mood?</h2>
+<div id="rate-view" class="start-view toggle-view">
+    <h3 id="the-question">What's your mood?</h3>
     <div class="mood-rating">
-        <span>bad</span>
-
-        <input type="radio" name="mood" id="1_mood" value="1">
-        <label for="1_mood">1</label>
-
-        <input type="radio" name="mood" id="2_mood" value="2">
-        <label for="2_mood">2</label>
-
-        <input type="radio" name="mood" id="3_mood" value="3">
-        <label for="3_mood">3</label>
-
-        <input type="radio" name="mood" id="4_mood" value="4">
-        <label for="4_mood">4</label>
-
-        <input type="radio" name="mood" id="5_mood" value="5">
-        <label for="5_mood">5</label>
-
-        <span>good</span>
+        <form action="#">
+            <p>
+                <label>
+                    <input type="radio" name="rating" value="1">
+                    <span>terrible</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="rating" value="2">
+                    <span>bad</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="rating" value="3">
+                    <span>okay</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="rating" value="4">
+                    <span>good</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="rating" value="5">
+                    <span>excellent</span>
+                </label>
+            </p>
+        </form>
     </div>
 </div>
 
 
-<div id="history-view" style="display: none;">
-    <h2>Answers</h2>
-    <ul id="prev-ratings"></ul>
+<div id="history-view" class="toggle-view">
+
+    <ul id="prev-ratings" class="collection with-header">
+        <li class="collection-header"><h4>Answers</h4></li>
+        <!-- inserted by js -->
+    </ul>
 </div>
 
 <script>
     require('./src/frontend/frontend');
 </script>
+
+<script src="materialize/js/materialize.js"></script>
 
 </body>
 </html>

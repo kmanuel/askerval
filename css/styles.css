@@ -1,0 +1,36 @@
+.toggle-view {
+    display: none;
+}
+
+.start-view {
+    display: block;
+}
+
+html {
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+    width: 100%;
+    border: 1px solid #006557;
+}
+
+#prev-ratings {
+    height: 435px;
+    overflow-y: scroll;
+}
+
+.screenshot-icon:hover {
+    cursor: pointer;
+}
+
+.collection {
+    border: none;
+}
+
+.screenshots-container {
+    text-align: center;
+}
+
+.collection-item {
+    height: 50px;
+}

@@ -32,15 +32,15 @@ function ScreenshotWindow(screenshotPath) {
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 275,
-        height: 325,
-        show: false,
+        width: 400,
+        height: 500,
+        show: true,
         frame: false,
         resizable: false,
         webPreferences: {backgroundThrottling: false}
     });
     mainWindow.loadFile('index.html');
-    mainWindow.hide();
+    // mainWindow.hide();
 }
 
 function toggleWindowVisibility() {
@@ -89,6 +89,7 @@ let createApp = function () {
 
 const addIpcListeners = function () {
     ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
+        mainWindow.hide();
         screenCapturer.capture()
             .then((filenames) => {
                 const entry = {...rating, date: new Date(), screenshots: filenames};
@@ -99,7 +100,6 @@ const addIpcListeners = function () {
                     if (err) {
                         console.log('error inserting rating', err);
                     }
-                    mainWindow.hide();
                 });
             })
             .catch(err => {
