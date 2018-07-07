@@ -1,6 +1,6 @@
 # askerval
 
-Application prompts you with a question in a set interval and records the answers and screenshots.
+Application that prompts you with a question in a set interval and records the answers and screenshots.
 
 ## Setup
 
@@ -19,4 +19,3 @@ run `npm install`
 
 ### Running the application
 run `npm start`
-   
