@@ -11,7 +11,7 @@ const create = () => {
         let screenshotLink;
         if (entry.screenshot) {
             screenshotLink = document.createElement('a');
-            screenshotLink.addEventListener('click', (evt) => {
+            screenshotLink.addEventListener('click', () => {
                 ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, entry.screenshot);
             });
             screenshotLink.appendChild(text);
