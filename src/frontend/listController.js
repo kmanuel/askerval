@@ -7,20 +7,22 @@ const create = () => {
         const entryListItem = document.createElement('li');
         const formattedDate = new Date(entry.date).toLocaleDateString('en-US', options);
         const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
+        entryListItem.appendChild(text);
 
-        let screenshotLink;
         if (entry.screenshot) {
-            screenshotLink = document.createElement('a');
+            const screenshotLink = document.createElement('a');
             screenshotLink.addEventListener('click', () => {
                 ipcRenderer.send(ipcConstants.SCREENSHOT_SHOW, entry.screenshot);
             });
-            screenshotLink.appendChild(text);
-
+            const icon = document.createElement("img");
+            icon.src = 'screenshot_icon.jpeg';
+            icon.style.width = '10px';
+            icon.style.height = '10px';
+            screenshotLink.appendChild(icon);
 
             entryListItem.appendChild(screenshotLink);
-        } else {
-            entryListItem.appendChild(text);
         }
+
         prevAnswersEl.appendChild(entryListItem);
     };
 
@@ -39,8 +41,8 @@ const create = () => {
         ratings
             .map(rating => rating.entry)
             .forEach(entry => {
-            addListEntry(entry, options, prevAnswersEl);
-        })
+                addListEntry(entry, options, prevAnswersEl);
+            })
     };
 
     ipcRenderer.on(ipcConstants.ENTRIES_LOAD_RESPONSE, (evt, ratings) => {
