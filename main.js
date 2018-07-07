@@ -34,13 +34,13 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({
         width: 400,
         height: 500,
-        show: true,
+        show: false,
         frame: false,
         resizable: false,
         webPreferences: {backgroundThrottling: false}
     });
     mainWindow.loadFile('index.html');
-    // mainWindow.hide();
+    mainWindow.hide();
 }
 
 function toggleWindowVisibility() {
