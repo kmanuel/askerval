@@ -4,7 +4,9 @@ const {ipcRenderer} = electron;
 
 const create = () => {
     document.querySelectorAll('input[name=mood]').forEach(e => e.addEventListener('click', (evt) => {
-        ipcRenderer.send(ipcConstants.RATING_NEW, evt.target.value);
+        const question = document.querySelector('#the-question').innerText;
+        const value = evt.target.value;
+        ipcRenderer.send(ipcConstants.RATING_NEW, {question, value});
     }));
 
     const show = function () {

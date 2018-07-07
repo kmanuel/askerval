@@ -76,9 +76,9 @@ let createApp = function () {
 
 const addIpcListeners = function () {
     ipcMain.on(ipcConstants.RATING_NEW, (event, rating) => {
+        const entry = {...rating, date: new Date()};
         db.insert({
-            rating,
-            date: new Date()
+            entry
         }, (err) => {
             if (err) {
                 console.log('error inserting rating', err);

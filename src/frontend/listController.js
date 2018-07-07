@@ -3,21 +3,26 @@ const ipcConstants = require('../shared/ipcConstants');
 const {ipcRenderer} = electron;
 
 const create = () => {
-    const addMoodListEntry = function (mood, options, prevMoodsEl) {
+    const addListEntry = function (entry, options, prevAnswersEl) {
+        console.log('adding list entry', entry);
+
+        const {entryValue, entryDate} = entry;
+        console.log('entryDate', entryDate);
+        console.log('entryValue', entryValue);
+
         const moodLi = document.createElement('li');
-        const formattedDate = new Date(mood.date).toLocaleDateString('en-US', options);
-        const text = document.createTextNode(`${formattedDate}: ${mood.rating}`);
+        const formattedDate = new Date(entry.date).toLocaleDateString('en-US', options);
+        const text = document.createTextNode(`${formattedDate}: ${entry.value}`);
 
         moodLi.appendChild(text);
-        prevMoodsEl.appendChild(moodLi);
+        prevAnswersEl.appendChild(moodLi);
     };
 
-    const updateMoodList = (moods) => {
-        const prevMoodsEl = document.querySelector('#prev-moods');
-        prevMoodsEl.innerHTML = '';
+    const updateList = (ratings) => {
+        const prevAnswersEl = document.querySelector('#prev-ratings');
+        prevAnswersEl.innerHTML = '';
 
         const options = {
-            weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -25,13 +30,15 @@ const create = () => {
             minute: 'numeric'
         };
 
-        moods.forEach(mood => {
-            addMoodListEntry(mood, options, prevMoodsEl);
+        ratings
+            .map(rating => rating.entry)
+            .forEach(entry => {
+            addListEntry(entry, options, prevAnswersEl);
         })
     };
 
-    ipcRenderer.on(ipcConstants.ENTRIES_LOAD_RESPONSE, (evt, moods) => {
-        updateMoodList(moods);
+    ipcRenderer.on(ipcConstants.ENTRIES_LOAD_RESPONSE, (evt, ratings) => {
+        updateList(ratings);
     });
 
     const switchToHistoryView = () => {
