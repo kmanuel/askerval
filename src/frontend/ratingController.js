@@ -11,9 +11,9 @@ const create = () => {
 
     const show = function () {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.toggle-view').forEach(view => view.style.display= 'none');
         document.querySelector('#rate-nav').classList.add('active');
         document.querySelector('#rate-view').style.display = 'block';
-        document.querySelector('#history-view').style.display = 'none';
     };
 
     return {show}

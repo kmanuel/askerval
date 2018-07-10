@@ -73,8 +73,8 @@ const create = () => {
 
     const switchToHistoryView = () => {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.toggle-view').forEach(view => view.style.display= 'none');
         document.querySelector('#list-nav').classList.add('active');
-        document.querySelector('#rate-view').style.display = 'none';
         document.querySelector('#history-view').style.display = 'block';
     };
 

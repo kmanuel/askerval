@@ -18,6 +18,7 @@
         <ul id="nav-mobile" class="right">
             <li id="rate-nav" class="nav-item active"><a id=rate-view-btn" href="#">Rate</a></li>
             <li id="list-nav" class="nav-item"><a id="history-view-btn" href="#">History</a></li>
+            <li id="settings-nav" class="nav-item"><a id="settings-view-btn" href="#">Settings</a></li>
         </ul>
     </div>
 </nav>
@@ -67,6 +68,18 @@
         <li class="collection-header"><h4>Answers</h4></li>
         <!-- inserted by js -->
     </ul>
+</div>
+
+<div id="settings-view" class="toggle-view">
+    <form>
+        <input id="question-settings" type="text">
+        <label for="question-settings">Question</label>
+        <br>
+        <input id="interval-settings" type="number">
+        <label for="interval-settings">Interval</label>
+        <br>
+        <button class="btn waves-effect waves-light">Save</button>
+    </form>
 </div>
 
 <script>
