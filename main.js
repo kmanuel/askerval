@@ -119,7 +119,13 @@ const addIpcListeners = function () {
 
     ipcMain.on(ipcConstants.SCREENSHOT_SHOW, (evt, filename) => {
         new ScreenshotWindow(filename);
-    })
+    });
+
+    ipcMain.on(ipcConstants.SETTINGS_CHANGE, (evt, settings) => {
+        console.log('received settings change', settings);
+    });
+
+
 };
 
 createApp();
