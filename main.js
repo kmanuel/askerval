@@ -80,8 +80,12 @@ const loadSettings = async () => {
             if (err) {
                 reject(err);
             } else {
-                appSettings.question = docs.question;
-                appSettings.interval = docs.interval;
+                if (docs && docs.question && docs.interval) {
+                    appSettings.question = docs.question;
+                    appSettings.interval = docs.interval;
+                } else {
+                    console.log('no settings in db. using default values');
+                }
                 resolve();
             }
         });
