@@ -16,8 +16,6 @@ document.querySelector('#settings-nav').addEventListener('click', settingsContro
 
 ipcRenderer.send(ipcConstants.SETTINGS_LOAD);
 ipcRenderer.on(ipcConstants.SETTINGS_ENTRIES, (evt, settings) => {
-
     ratingController.setQuestion(settings.question);
     settingsController.setSettings(settings);
-
 });

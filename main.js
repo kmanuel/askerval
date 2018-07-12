@@ -74,10 +74,26 @@ const restartAskingTimer = () => {
 };
 
 
+const loadSettings = async () => {
+    return new Promise((resolve, reject) => {
+        db.findOne({'type': 'settings'}, (err, docs) => {
+            if (err) {
+                reject(err);
+            } else {
+                appSettings.question = docs.question;
+                appSettings.interval = docs.interval;
+                resolve();
+            }
+        });
+    });
+};
+
 function init() {
-    createMainWindow();
-    createTray();
-    startAskingTimer();
+    loadSettings().then(() => {
+        createMainWindow();
+        createTray();
+        startAskingTimer();
+    });
 }
 
 let createApp = function () {
@@ -102,8 +118,7 @@ const addIpcListeners = function () {
         mainWindow.hide();
         screenCapturer.capture()
             .then((filenames) => {
-                const entry = {...rating, date: new Date(), screenshots: filenames};
-                console.log('inserting entry', entry);
+                const entry = {type: 'rating-entry', ...rating, date: new Date(), screenshots: filenames};
                 db.insert({
                     entry
                 }, (err) => {
@@ -118,7 +133,7 @@ const addIpcListeners = function () {
     });
 
     ipcMain.on(ipcConstants.ENTRIES_LOAD_REQUEST, () => {
-        db.find({}).sort({'entry.date': -1}).exec((err, docs) => {
+        db.find({'entry.type': 'rating-entry'}).sort({'entry.date': -1}).exec((err, docs) => {
             if (err) {
                 console.log('error loading moods', err);
             } else {
@@ -131,9 +146,24 @@ const addIpcListeners = function () {
         new ScreenshotWindow(filename);
     });
 
-    ipcMain.on(ipcConstants.SETTINGS_CHANGE, (evt, settings) => {
+    const updateSettings = (settings) => {
         appSettings.question = settings.question;
         appSettings.interval = settings.interval;
+        db.remove({ type: 'settings' }, {}, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                db.insert({type: 'settings', ...settings}, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
+            }
+        });
+    };
+
+    ipcMain.on(ipcConstants.SETTINGS_CHANGE, (evt, settings) => {
+        updateSettings(settings);
         restartAskingTimer();
         sendSettings();
     });
@@ -145,7 +175,6 @@ const addIpcListeners = function () {
     const sendSettings = () => {
         mainWindow.webContents.send(ipcConstants.SETTINGS_ENTRIES, appSettings);
     };
-
 
 };
 
