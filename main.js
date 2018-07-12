@@ -17,7 +17,11 @@ const ONE_HOUR = ONE_MINUTE * 60;
 const {app, BrowserWindow, Tray, ipcMain} = require('electron');
 
 let mainWindow, askingTimer;
-let askingTimeout = ONE_HOUR;
+
+const appSettings = {
+    question: 'How\'s your current mood?',
+    interval: ONE_HOUR
+};
 
 function ScreenshotWindow(screenshotPath) {
     const screenshotWindow = new BrowserWindow({
@@ -61,8 +65,14 @@ let createTray = function () {
 let startAskingTimer = function () {
     askingTimer = setInterval(() => {
         mainWindow.show();
-    }, askingTimeout);
+    }, appSettings.interval);
 };
+
+const restartAskingTimer = () => {
+    clearInterval(askingTimer);
+    startAskingTimer();
+};
+
 
 function init() {
     createMainWindow();
@@ -122,8 +132,19 @@ const addIpcListeners = function () {
     });
 
     ipcMain.on(ipcConstants.SETTINGS_CHANGE, (evt, settings) => {
-        console.log('received settings change', settings);
+        appSettings.question = settings.question;
+        appSettings.interval = settings.interval;
+        restartAskingTimer();
+        sendSettings();
     });
+
+    ipcMain.on(ipcConstants.SETTINGS_LOAD, () => {
+        sendSettings();
+    });
+
+    const sendSettings = () => {
+        mainWindow.webContents.send(ipcConstants.SETTINGS_ENTRIES, appSettings);
+    };
 
 
 };

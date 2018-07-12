@@ -16,7 +16,14 @@ const create = () => {
         document.querySelector('#rate-view').style.display = 'block';
     };
 
-    return {show}
+    const setQuestion = (question) => {
+        document.querySelector('#the-question').innerText = question;
+    };
+
+    return {
+        show,
+        setQuestion
+    };
 };
 
 module.exports = {create};

@@ -9,13 +9,13 @@ const create = () => {
 
         formElements.forEach(el => console.log(el.tagName));
 
-        const settings = formElements
-            .filter(el => el.tagName === 'INPUT')
-            .map(el => {
-                return {
-                    "name": el.name, "value": el.value
-                }
-            });
+        const questionInputElement = evt.target.querySelector('[name=\'question-input\']');
+        const intervalInputElement = evt.target.querySelector('[name=\'interval-input\']');
+
+        const settings = {
+            "question": questionInputElement.value,
+            "interval": intervalInputElement.value,
+        };
 
         ipcRenderer.send(ipcConstants.SETTINGS_CHANGE, settings);
     });
@@ -28,7 +28,15 @@ const create = () => {
         document.querySelector('#settings-view').style.display = 'block';
     };
 
-    return {show}
+    const setSettings = (settings) => {
+        document.querySelector('#question-settings').value = settings.question;
+        document.querySelector('#interval-settings').value = parseInt(settings.interval);
+    };
+
+    return {
+        show,
+        setSettings
+    };
 };
 
 module.exports = {create};
